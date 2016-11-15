@@ -1,0 +1,7 @@
+ACLOCAL_AMFLAGS=-I m4
+
+SUBDIRS = src test
+
+EXTRA_DIST= \
+   *.sln \
+   src/*.vcxproj*
