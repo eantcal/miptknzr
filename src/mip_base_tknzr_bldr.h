@@ -32,6 +32,9 @@ namespace mip {
 //! Abstract base class of tokenizer builder objects
 struct base_tknzr_bldr_t
 {
+    //! dtor
+    virtual ~base_tknzr_bldr_t() {}
+
     //! Build a tokenizer object
     virtual std::unique_ptr< base_tknzr_t > build() = 0;
 
