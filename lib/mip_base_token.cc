@@ -19,38 +19,38 @@ namespace mip {
 
 /* -------------------------------------------------------------------------- */
 
-const char* base_token_t::type2str(tcl_t type) {
+const char_t* base_token_t::type2str(tcl_t type) {
     switch (type) {
     case tcl_t::ATOM:
-        return "atomic";
+        return _T("atomic");
     case tcl_t::BLANK:
-        return "blank";
+        return _T("blank");
     case tcl_t::COMMENT:
-        return "comment";
+        return _T("comment");
     case tcl_t::END_OF_FILE:
-        return "eof";
+        return _T("eof");
     case tcl_t::END_OF_LINE:
-        return "eol";
+        return _T("eol");
     case tcl_t::OTHER:
-        return "other";
+        return _T("other");
     case tcl_t::STRING:
-        return "string";
+        return _T("string");
     default:
         break;
     }
 
-    return "unknown";
+    return _T("unknown");
 }
 
 
 /* -------------------------------------------------------------------------- */
 
-std::ostream& operator<<(std::ostream& os, base_token_t& tkn) {
-    os << "type:'"
+_ostream& operator<<(_ostream& os, base_token_t& tkn) {
+    os << _T("type:'")
         << base_token_t::type2str(tkn.type())
-        << "' value:'"
-        << tkn.value() << "' at "
-        << tkn.line() + 1 << "." << tkn.offset() + 1
+        << _T("' value:'")
+        << tkn.value() << _T("' at ")
+        << tkn.line() + 1 << _T(".") << tkn.offset() + 1
         << std::endl;
 
     return os;

@@ -22,7 +22,7 @@ namespace mip {
 
 /* -------------------------------------------------------------------------- */
 
-void esc_cnvrtr_t::_tail(std::string & str, size_t cnt)
+void esc_cnvrtr_t::_tail(string_t & str, size_t cnt)
 {
     if (str.size() <= cnt) {
         str.clear();
@@ -35,7 +35,7 @@ void esc_cnvrtr_t::_tail(std::string & str, size_t cnt)
 
 /* -------------------------------------------------------------------------- */
 
-bool esc_cnvrtr_t::_octal2dec(const std::string & str, unsigned int& res, size_t & cnt)
+bool esc_cnvrtr_t::_octal2dec(const string_t & str, unsigned int& res, size_t & cnt)
 {
     if (str.size() < 2) {
         return false;
@@ -51,11 +51,11 @@ bool esc_cnvrtr_t::_octal2dec(const std::string & str, unsigned int& res, size_t
 
         auto ch = str[i];
 
-        if (ch<'0' || ch>'7') {
+        if (ch<_T('0') || ch>_T('7')) {
             return false;
         }
 
-        res += (ch - '0') << (3 * (cnt - i - 1));
+        res += (ch - _T('0')) << (3 * (cnt - i - 1));
     }
 
     return true;
@@ -64,20 +64,21 @@ bool esc_cnvrtr_t::_octal2dec(const std::string & str, unsigned int& res, size_t
 
 /* -------------------------------------------------------------------------- */
 
-bool esc_cnvrtr_t::_hex2dec(const std::string & str, unsigned int& res, size_t & cnt)
+bool esc_cnvrtr_t::_hex2dec(const string_t & str, unsigned int& res, size_t & cnt)
 {
     if (str.size() < 2 || (str[0] != 'x' && str[0] != 'X')) {
         return false;
     }
 
     cnt = str.size();
-    std::string hex = str.substr(1, cnt - 1);
+    string_t hex = str.substr(1, cnt - 1);
 
     size_t i = 0;
     for (; i < cnt; ++i) {
         const auto ch = ::tolower(hex[i]);
 
-        bool ok = (ch >= '0' && ch <= '9') || (ch >= 'a' && ch < 'f');
+        bool ok = (ch >= _T('0') && ch <= _T('9')) || 
+                  (ch >= _T('a') && ch < _T('f'));
         if (!ok)
             break;
     }
@@ -98,48 +99,48 @@ bool esc_cnvrtr_t::_hex2dec(const std::string & str, unsigned int& res, size_t &
 
 /* -------------------------------------------------------------------------- */
 
-bool esc_cnvrtr_t::convert(const std::string& str, size_t & rcnt, char & ch) const
+bool esc_cnvrtr_t::convert(const string_t& str, size_t & rcnt, char_t & ch) const
 {
     if (str.size() <= 1) {
         return false;
     }
 
-    const char prefix = str[1];
+    const char_t prefix = str[1];
     rcnt = 2;
 
     switch (prefix) {
-    case '\'':
-        ch = '\'';
+    case _T('\''):
+        ch = _T('\'');
         break;
-    case '"':
-        ch = '"';
+    case _T('"'):
+        ch = _T('"');
         break;
-    case '\\':
-        ch = '\\';
+    case _T('\\'):
+        ch = _T('\\');
         break;
-    case 'n':
-        ch = '\n';
+    case _T('n'):
+        ch = _T('\n');
         break;
-    case 't':
-        ch = '\t';
+    case _T('t'):
+        ch = _T('\t');
         break;
-    case 'b':
-        ch = '\b';
+    case _T('b'):
+        ch = _T('\b');
         break;
-    case 'f':
-        ch = '\f';
+    case _T('f'):
+        ch = _T('\f');
         break;
-    case 'a':
-        ch = '\a';
+    case _T('a'):
+        ch = _T('\a');
         break;
-    case '?':
-        ch = '?';
+    case _T('?'):
+        ch = _T('?');
         break;
-    case '0':
-        ch = '\0';
+    case _T('0'):
+        ch = _T('\0');
         break;
     default:
-        if (str.size() >= 3 && (str[1] >= '0' && str[1] <= '7')) {
+        if (str.size() >= 3 && (str[1] >= _T('0') && str[1] <= _T('7'))) {
             unsigned int res = 0;
             const bool ok = _octal2dec(str.c_str() + 1, res, rcnt);
 
@@ -147,12 +148,12 @@ bool esc_cnvrtr_t::convert(const std::string& str, size_t & rcnt, char & ch) con
                 return false;
             }
 
-            ch = static_cast<char>(res);
+            ch = static_cast<char_t>(res);
             ++rcnt;
 
             break;
         }
-        else if (str.size() >= 2 && (str[1] == 'x' || str[1] == 'X')) {
+        else if (str.size() >= 2 && (str[1] == _T('x') || str[1] == _T('X'))) {
             unsigned int res = 0;
             const bool ok = _hex2dec(str.c_str() + 1, res, rcnt);
 
@@ -160,7 +161,7 @@ bool esc_cnvrtr_t::convert(const std::string& str, size_t & rcnt, char & ch) con
                 return false;
             }
 
-            ch = static_cast<char>(res);
+            ch = static_cast<char_t>(res);
             ++rcnt;
 
             break;

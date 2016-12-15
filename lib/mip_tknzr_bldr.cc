@@ -48,7 +48,7 @@ std::unique_ptr< base_tknzr_t > tknzr_bldr_t::build()
 
 /* -------------------------------------------------------------------------- */
 
-bool tknzr_bldr_t::def_atom(const std::string& value)
+bool tknzr_bldr_t::def_atom(const string_t& value)
 {
     return _def_item(value, _tknzr->_atomdef);
 }
@@ -56,7 +56,7 @@ bool tknzr_bldr_t::def_atom(const std::string& value)
 
 /* -------------------------------------------------------------------------- */
 
-bool tknzr_bldr_t::def_blank(const std::string& value)
+bool tknzr_bldr_t::def_blank(const string_t& value)
 {
     return _def_item(value, _tknzr->_blkdef);
 }
@@ -72,7 +72,7 @@ bool tknzr_bldr_t::def_eol(const base_tknzr_t::eol_t& value)
 
 /* -------------------------------------------------------------------------- */
 
-bool tknzr_bldr_t::def_sl_comment(const std::string& prefix)
+bool tknzr_bldr_t::def_sl_comment(const string_t& prefix)
 {
     return _def_item(prefix, _tknzr->_sl_comdef);
 }
@@ -81,17 +81,17 @@ bool tknzr_bldr_t::def_sl_comment(const std::string& prefix)
 /* -------------------------------------------------------------------------- */
 
 bool tknzr_bldr_t::def_ml_comment(
-    const std::string& begin,
-    const std::string& end)
+    const string_t& begin,
+    const string_t& end)
 {
-    std::pair<std::string, std::string> value{ begin, end };
+    std::pair<string_t, string_t> value{ begin, end };
     return _def_item(value, _tknzr->_ml_comdef);
 }
 
 
 /* -------------------------------------------------------------------------- */
 
-bool tknzr_bldr_t::def_string(char quote, std::shared_ptr<base_esc_cnvrtr_t> et)
+bool tknzr_bldr_t::def_string(char_t quote, std::shared_ptr<base_esc_cnvrtr_t> et)
 {
     auto it = _tknzr->_strdef.find(quote);
     if (it != _tknzr->_strdef.end()) {

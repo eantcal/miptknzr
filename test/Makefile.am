@@ -3,7 +3,7 @@ sbin_PROGRAMS =
 
 AM_CPPFLAGS = \
    -g \
-   -I$(top_srcdir)/src 
+   -I$(top_srcdir)/include
 
 test_CXXFLAGS = \
    -std=c++11 \
@@ -15,7 +15,7 @@ test_SOURCES = \
 AM_CXXFLAGS = ${test_CXXFLAGS}
 
 test_LDADD = \
-   -L../src/.libs/ -lmiptknzr
+   -L../lib/.libs/ -lmiptknzr
 
 sbin_PROGRAMS += \
    test 

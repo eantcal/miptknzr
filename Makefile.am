@@ -1,7 +1,8 @@
 ACLOCAL_AMFLAGS=-I m4
 
-SUBDIRS = src test
+SUBDIRS = lib test
 
 EXTRA_DIST= \
+   include/*.h \
    *.sln \
    src/*.vcxproj*

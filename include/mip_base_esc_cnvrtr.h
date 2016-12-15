@@ -31,8 +31,8 @@ namespace mip {
 //! Abstract base class of escape sequences converter
 struct base_esc_cnvrtr_t {
     virtual ~base_esc_cnvrtr_t() {}
-    virtual bool convert(const std::string& str, size_t & rcnt, char & ch) const = 0;
-    virtual char escape_char() const noexcept = 0;
+    virtual bool convert(const string_t& str, size_t & rcnt, char_t & ch) const = 0;
+    virtual char_t escape_char() const noexcept = 0;
 };
 
 

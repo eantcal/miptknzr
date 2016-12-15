@@ -13,6 +13,9 @@
 
 #include <sstream>
 
+#include <iomanip>
+#include <iostream>
+
 
 /* -------------------------------------------------------------------------- */
 
@@ -21,7 +24,7 @@ namespace mip {
 
 /* -------------------------------------------------------------------------- */
 
-bool tknzr_t::_is_prefix_ch(const char ch, const std::set<std::string> & tknset)
+bool tknzr_t::_is_prefix_ch(const char_t ch, const std::set<string_t> & tknset)
 {
     for (const auto & item : tknset) {
         if (!item.empty() && item[0] == ch) {
@@ -35,9 +38,9 @@ bool tknzr_t::_is_prefix_ch(const char ch, const std::set<std::string> & tknset)
 
 /* -------------------------------------------------------------------------- */
 
-std::set<std::string>::const_reverse_iterator tknzr_t::_search_token(
-    const std::set<std::string>& tknset,
-    std::string & line)
+std::set<string_t>::const_reverse_iterator tknzr_t::_search_token(
+    const std::set<string_t>& tknset,
+    string_t & line)
 {
     auto it = tknset.rbegin();
 
@@ -57,12 +60,12 @@ std::set<std::string>::const_reverse_iterator tknzr_t::_search_token(
 
 /* -------------------------------------------------------------------------- */
 
-std::string tknzr_t::_extract_token(
-    const std::string& set_tkn,
-    std::string & line,
+string_t tknzr_t::_extract_token(
+    const string_t& set_tkn,
+    string_t & line,
     get_t cut_type)
 {
-    std::string token;
+    string_t token;
 
     if (cut_type == get_t::WHOLE_LN) {
         token = line;
@@ -80,13 +83,12 @@ std::string tknzr_t::_extract_token(
 /* -------------------------------------------------------------------------- */
 
 bool tknzr_t::_getline(
-    std::istream & is, std::string & line, std::string& eol_s, bool & eof)
+    _istream & is, string_t & line, string_t& eol_s, bool & eof)
 {
-    const bool crlf = _eoldef.find(base_tknzr_t::eol_t::CR_LF) != _eoldef.end();
     const bool cr = _eoldef.find(base_tknzr_t::eol_t::CR) != _eoldef.end();
     const bool lf = _eoldef.find(base_tknzr_t::eol_t::LF) != _eoldef.end();
 
-    std::stringstream ss;
+    _stringstream ss;
 
     eof = is.eof();
 
@@ -96,39 +98,26 @@ bool tknzr_t::_getline(
             return false;
         }
 
-        char ch = 0;
+        char_t ch = 0;
         is >> ch;
 
         eof = is.eof() || ch == 0;
 
         if (eof) {
             line = ss.str();
-            eol_s = "";
+            eol_s = _T("");
             return true;
         }
 
-        if (crlf) {
-            char ch2 = 0;
-            is >> ch2;
-            if (ch == '\r' && ch2 == '\n') {
-                line = ss.str();
-                eol_s = "\r\n";
-                return true;
-            }
-            else {
-                is.unget();
-            }
-        }
-
-        if (cr && ch == '\r') {
+        if (cr && ch == _T('\r')) {
             line = ss.str();
-            eol_s = "\r";
+            eol_s = _T("\r");
             return true;
         }
 
-        if (lf && ch == '\n') {
+        if (lf && ch == _T('\n')) {
             line = ss.str();
-            eol_s = "\n";
+            eol_s = _T("\n");
             return true;
         }
 
@@ -216,7 +205,7 @@ std::unique_ptr<base_token_t> tknzr_t::_search_other_tkn()
 /* -------------------------------------------------------------------------- */
 
 std::unique_ptr<base_token_t> tknzr_t::_get_tkn(
-    const std::set<std::string> & tknset,
+    const std::set<string_t> & tknset,
     token_t::tcl_t tkncl,
     get_t cut_type)
 {
@@ -264,7 +253,7 @@ std::unique_ptr<base_token_t> tknzr_t::_get_tkn(
 
 bool tknzr_t::_ml_comment_begin( 
     const std::set<ml_commdef_t> & tknset,
-    std::string& end_comment)
+    string_t& end_comment)
 {
     for (const auto & item : tknset) {
         
@@ -298,19 +287,19 @@ std::unique_ptr<base_token_t> tknzr_t::_get_string()
     }
 
     const auto esc_cnvt = quote_esc_it->second;
-    const char esc_ch =
+    const char_t esc_ch =
         esc_cnvt ? esc_cnvt->escape_char() : 0;
 
     if (_textline.size() == 2 && _textline[1] != quote_ch) {
         return nullptr;
     }
 
-    std::stringstream ss;
+    _stringstream ss;
 
     size_t extra_ch_cnt = 2; /* quotes + any esc */
 
     for (size_t i = 1; i < _textline.size(); ++i) {
-        auto ch = _textline[i];
+        char_t ch = _textline[i];
 
         if (esc_cnvt && ch == esc_ch) {
             size_t remove_cnt = 0;
@@ -357,13 +346,13 @@ std::unique_ptr<base_token_t> tknzr_t::_get_string()
 
 std::unique_ptr<base_token_t>
 tknzr_t::_extract_comment(
-    std::string & comment,
+    string_t & comment,
     size_t end_comment_offset,
-    std::string& end_comment,
+    string_t& end_comment,
     size_t line_number,
     size_t offset)
 {
-    if (end_comment_offset != std::string::npos) {
+    if (end_comment_offset != string_t::npos) {
         auto left_comment = _textline.substr(
             0, 
             end_comment_offset + end_comment.size());
@@ -395,10 +384,10 @@ tknzr_t::_extract_comment(
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::_get_comment(std::istream & is)
+std::unique_ptr<base_token_t> tknzr_t::_get_comment(_istream & is)
 {
-    std::string comment;
-    std::string end_comment;
+    string_t comment;
+    string_t end_comment;
 
     const size_t comment_line = _line_number;
     const size_t comment_offset = _offset;
@@ -424,7 +413,7 @@ std::unique_ptr<base_token_t> tknzr_t::_get_comment(std::istream & is)
         }
 
         bool eof = false;
-        while (!eof && end_comment_offset == std::string::npos) {
+        while (!eof && end_comment_offset == string_t::npos) {
             comment += _textline;
             comment += _eol_seq;
             
@@ -458,7 +447,7 @@ std::unique_ptr<base_token_t> tknzr_t::_get_comment(std::istream & is)
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::next(std::istream & is)
+std::unique_ptr<base_token_t> tknzr_t::next(_istream & is)
 {
     is.unsetf(std::ios_base::skipws);
 
@@ -533,7 +522,7 @@ std::unique_ptr<base_token_t> tknzr_t::next(std::istream & is)
             _other_token += _textline[0];
 
             _textline =
-                _textline.size() == 1 ? "" :
+                _textline.size() == 1 ? _T("") :
                 _textline.substr(1, _textline.size() - 1);
         }
     }

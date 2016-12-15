@@ -19,5 +19,7 @@ libmiptknzr_la_SOURCES = \
    mip_tknzr.h \
    mip_token.h
 
-AM_CXXFLAGS = $(INTI_CFLAGS) -std=c++11 
+AM_CXXFLAGS = $(INTI_CFLAGS) \
+   -std=c++11 \
+   -I$(top_srcdir)/include
 

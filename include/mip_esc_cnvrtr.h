@@ -32,22 +32,22 @@ namespace mip {
 class esc_cnvrtr_t : public base_esc_cnvrtr_t
 {
 private:
-    static void _tail(std::string & str, size_t cnt = 1);
-    static bool _octal2dec(const std::string & str, unsigned int& res, size_t & cnt);
-    static bool _hex2dec(const std::string & str, unsigned int& res, size_t & cnt);
+    static void _tail(string_t & str, size_t cnt = 1);
+    static bool _octal2dec(const string_t & str, unsigned int& res, size_t & cnt);
+    static bool _hex2dec(const string_t & str, unsigned int& res, size_t & cnt);
 
-    char _esc_char = '\\';
+    char_t _esc_char = _T('\\');
 
 public:
     //! ctor
     //! @param esc_char is escape sequence prefix character
-    esc_cnvrtr_t(char esc_char = '\\') noexcept :
+    esc_cnvrtr_t(char_t esc_char = _T('\\')) noexcept :
         _esc_char(esc_char)
     {
     }
 
     //! Return the escape sequence prefix character
-    char escape_char() const noexcept override {
+    char_t escape_char() const noexcept override {
         return _esc_char;
     }
 
@@ -59,7 +59,7 @@ public:
     //! @param rcnt is the number of character of escape sequnce (including esc prefix)
     //! @param ch is a converted character
     //! @return true in case of success, false otherwise
-    bool convert(const std::string& str, size_t & rcnt, char & ch) const override;
+    bool convert(const string_t& str, size_t & rcnt, char_t & ch) const override;
 };
 
 

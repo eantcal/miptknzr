@@ -62,12 +62,12 @@ public:
 
     std::unique_ptr< base_tknzr_t > build() override;
 
-    bool def_atom(const std::string& value) override;
-    bool def_blank(const std::string& value) override;
+    bool def_atom(const string_t& value) override;
+    bool def_blank(const string_t& value) override;
     bool def_eol(const base_tknzr_t::eol_t& value) override;
-    bool def_sl_comment(const std::string& prefix) override;
-    bool def_ml_comment(const std::string& begin, const std::string& end) override;
-    bool def_string(char quote, std::shared_ptr<base_esc_cnvrtr_t> et = nullptr) override;
+    bool def_sl_comment(const string_t& prefix) override;
+    bool def_ml_comment(const string_t& begin, const string_t& end) override;
+    bool def_string(char_t quote, std::shared_ptr<base_esc_cnvrtr_t> et = nullptr) override;
 };
 
 

@@ -39,22 +39,22 @@ struct base_tknzr_bldr_t
     virtual std::unique_ptr< base_tknzr_t > build() = 0;
 
     //! Add a definition of an atomic token
-    virtual bool def_atom(const std::string& value) = 0;
+    virtual bool def_atom(const string_t& value) = 0;
 
     //! Add a definition of a blank token
-    virtual bool def_blank(const std::string& value) = 0;
+    virtual bool def_blank(const string_t& value) = 0;
 
     //! Add a definition of a multi-line comment
-    virtual bool def_ml_comment(const std::string& begin, const std::string& end) = 0;
+    virtual bool def_ml_comment(const string_t& begin, const string_t& end) = 0;
 
     //! Add a definition of a single-line comment
-    virtual bool def_sl_comment(const std::string& prefix) = 0;
+    virtual bool def_sl_comment(const string_t& prefix) = 0;
 
     //! Add a definition of end-of-line token
     virtual bool def_eol(const base_tknzr_t::eol_t& value) = 0;
 
     //! Add a definition of a string token
-    virtual bool def_string(char quote, std::shared_ptr<base_esc_cnvrtr_t> et = nullptr) = 0;
+    virtual bool def_string(char_t quote, std::shared_ptr<base_esc_cnvrtr_t> et = nullptr) = 0;
 };
 
 

@@ -15,6 +15,8 @@
 
 /* -------------------------------------------------------------------------- */
 
+#include "mip_unicode.h"
+
 #include <string>
 #include <ostream>
 
@@ -40,7 +42,7 @@ struct base_token_t
     };
 
     //! Return <quota, escape prefix> of string token
-    virtual std::pair<char, char> get_quote_esc() const noexcept = 0;
+    virtual std::pair<char_t, char_t> get_quote_esc() const noexcept = 0;
 
     //! Return token line number (first line -> 0)
     virtual size_t line() const noexcept = 0;
@@ -52,13 +54,13 @@ struct base_token_t
     virtual tcl_t type() const noexcept = 0;
 
     //! Return token value
-    virtual const std::string& value() const noexcept = 0;
+    virtual const string_t& value() const noexcept = 0;
     
     //! Get a description of a given token type
-    static const char* type2str(tcl_t type);
+    static const char_t* type2str(tcl_t type);
 
     //! operator<< provided for debugging purposes
-    friend std::ostream& operator<<(std::ostream& os, base_token_t& tkn);
+    friend _ostream& operator<<(_ostream& os, base_token_t& tkn);
     
     //! dtor
     virtual ~base_token_t() {}

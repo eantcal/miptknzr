@@ -34,7 +34,7 @@ private:
     tcl_t _type = tcl_t::OTHER; 
 
     //! token value
-    std::string _value;  
+    string_t _value;  
  
     //! text line number
     size_t _line = 0;    
@@ -43,19 +43,19 @@ private:
     size_t _offset = 0;  
 
     //! quote of any string token
-    char _quote = 0; 
+    char_t _quote = 0; 
 
     //! escape sequence prefix; defined for token representing string
-    char _esc = 0;   
+    char_t _esc = 0;   
 
 public:
     token_t(
         const tcl_t& type,
-        const std::string& value,
+        const string_t& value,
         size_t line,
         size_t column,
-        char quote = 0,
-        char esc = 0)
+        char_t quote = 0,
+        char_t esc = 0)
         noexcept
         :
         _type(type),
@@ -67,8 +67,8 @@ public:
     {}
 
     //! return quote and escape sequence prefix
-    std::pair<char, char> get_quote_esc() const noexcept override {
-        return std::pair<char, char>(_quote, _esc);
+    std::pair<char_t, char_t> get_quote_esc() const noexcept override {
+        return std::pair<char_t, char_t>(_quote, _esc);
     }
 
     //! return token type
@@ -77,7 +77,7 @@ public:
     }
 
     //! return token value
-    const std::string& value() const noexcept override {
+    const string_t& value() const noexcept override {
         return _value;
     }
 

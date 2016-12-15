@@ -34,15 +34,14 @@ struct base_tknzr_t
     //! End-of-line ids
     enum class eol_t {
         CR,   // '\r'
-        LF,   // '\n'
-        CR_LF // "\r\n" sequence
+        LF
     };
 
     //! dtor
     virtual ~base_tknzr_t() {}
 
     //! Return (next) token found in the input stream or nullptr in case of error
-    virtual std::unique_ptr<base_token_t> next(std::istream & is) = 0;
+    virtual std::unique_ptr<base_token_t> next(_istream & is) = 0;
 };
 
 
