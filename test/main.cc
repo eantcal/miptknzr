@@ -36,8 +36,6 @@
 
 int main(int argc, mip::char_t* argv[])
 {
-    std::wcout;
-
     mip::tknzr_bldr_t bldr;
 
     bldr.def_atom(_T("("));
@@ -81,18 +79,15 @@ int main(int argc, mip::char_t* argv[])
     }
 
 #ifdef _UNICODE
-    if (is.is_open()) {
+    const std::locale utf16_locale
+        = std::locale(
+            std::locale(),
+            new std::codecvt_utf16<
+            wchar_t,
+            0x10ffff,
+            std::codecvt_mode(std::little_endian | std::consume_header)>());
 
-        const std::locale utf16_locale
-            = std::locale(
-                std::locale(), 
-                new std::codecvt_utf16<
-                    wchar_t, 
-                    0x10ffff, 
-                    std::codecvt_mode(std::little_endian | std::consume_header)>());
-
-        is.imbue(utf16_locale);
-    }
+    is.imbue(utf16_locale);
 #endif
 
     while (is.is_open() && !is.bad()) {

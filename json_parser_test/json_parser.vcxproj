@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2A50BD74-1771-4E10-A98F-DDEFCB91EDB4}</ProjectGuid>
+    <ProjectGuid>{A46FE1E8-91FF-47D5-9F7A-781520CFD4DB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -146,7 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cc" />
+    <ClCompile Include="json_parser.cc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\miptknzr.vcxproj">

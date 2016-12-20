@@ -120,6 +120,8 @@ bool esc_cnvrtr_t::convert(const string_t& str, size_t & rcnt, char_t & ch) cons
         break;
     case _T('n'):
         ch = _T('\n');
+    case _T('r'):
+        ch = _T('\r');
         break;
     case _T('t'):
         ch = _T('\t');
@@ -130,6 +132,7 @@ bool esc_cnvrtr_t::convert(const string_t& str, size_t & rcnt, char_t & ch) cons
     case _T('f'):
         ch = _T('\f');
         break;
+#if 0
     case _T('a'):
         ch = _T('\a');
         break;
@@ -139,6 +142,7 @@ bool esc_cnvrtr_t::convert(const string_t& str, size_t & rcnt, char_t & ch) cons
     case _T('0'):
         ch = _T('\0');
         break;
+#endif
     default:
         if (str.size() >= 3 && (str[1] >= _T('0') && str[1] <= _T('7'))) {
             unsigned int res = 0;
@@ -165,6 +169,9 @@ bool esc_cnvrtr_t::convert(const string_t& str, size_t & rcnt, char_t & ch) cons
             ++rcnt;
 
             break;
+        }
+        else {
+            ch = prefix;
         }
         return false;
     }
