@@ -104,7 +104,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(sbindir)"
 PROGRAMS = $(sbin_PROGRAMS)
-am_json_parser_test_OBJECTS = json_parser_test-json_parser.$(OBJEXT)
+am_json_parser_test_OBJECTS = json_parser_test-json_parser.$(OBJEXT) \
+	json_parser_test-mip_json.$(OBJEXT)
 json_parser_test_OBJECTS = $(am_json_parser_test_OBJECTS)
 json_parser_test_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -346,11 +347,11 @@ AM_CPPFLAGS = \
    -I$(top_srcdir)/include
 
 json_parser_test_CXXFLAGS = \
-   -std=c++11 \
+   -std=c++14 \
    -g 
 
 json_parser_test_SOURCES = \
-   json_parser.cc
+   json_parser.cc mip_json.cc
 
 AM_CXXFLAGS = ${json_parser_test_CXXFLAGS}
 json_parser_test_LDADD = \
@@ -450,6 +451,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/json_parser_test-json_parser.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/json_parser_test-mip_json.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -485,6 +487,20 @@ json_parser_test-json_parser.obj: json_parser.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='json_parser.cc' object='json_parser_test-json_parser.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(json_parser_test_CXXFLAGS) $(CXXFLAGS) -c -o json_parser_test-json_parser.obj `if test -f 'json_parser.cc'; then $(CYGPATH_W) 'json_parser.cc'; else $(CYGPATH_W) '$(srcdir)/json_parser.cc'; fi`
+
+json_parser_test-mip_json.o: mip_json.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(json_parser_test_CXXFLAGS) $(CXXFLAGS) -MT json_parser_test-mip_json.o -MD -MP -MF $(DEPDIR)/json_parser_test-mip_json.Tpo -c -o json_parser_test-mip_json.o `test -f 'mip_json.cc' || echo '$(srcdir)/'`mip_json.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/json_parser_test-mip_json.Tpo $(DEPDIR)/json_parser_test-mip_json.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='mip_json.cc' object='json_parser_test-mip_json.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(json_parser_test_CXXFLAGS) $(CXXFLAGS) -c -o json_parser_test-mip_json.o `test -f 'mip_json.cc' || echo '$(srcdir)/'`mip_json.cc
+
+json_parser_test-mip_json.obj: mip_json.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(json_parser_test_CXXFLAGS) $(CXXFLAGS) -MT json_parser_test-mip_json.obj -MD -MP -MF $(DEPDIR)/json_parser_test-mip_json.Tpo -c -o json_parser_test-mip_json.obj `if test -f 'mip_json.cc'; then $(CYGPATH_W) 'mip_json.cc'; else $(CYGPATH_W) '$(srcdir)/mip_json.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/json_parser_test-mip_json.Tpo $(DEPDIR)/json_parser_test-mip_json.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='mip_json.cc' object='json_parser_test-mip_json.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(json_parser_test_CXXFLAGS) $(CXXFLAGS) -c -o json_parser_test-mip_json.obj `if test -f 'mip_json.cc'; then $(CYGPATH_W) 'mip_json.cc'; else $(CYGPATH_W) '$(srcdir)/mip_json.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

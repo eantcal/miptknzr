@@ -6,11 +6,11 @@ AM_CPPFLAGS = \
    -I$(top_srcdir)/include
 
 json_parser_test_CXXFLAGS = \
-   -std=c++11 \
+   -std=c++14 \
    -g 
 
 json_parser_test_SOURCES = \
-   json_parser.cc
+   json_parser.cc mip_json.cc
 
 AM_CXXFLAGS = ${json_parser_test_CXXFLAGS}
 

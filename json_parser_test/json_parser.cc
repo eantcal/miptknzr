@@ -31,6 +31,10 @@
 #include "mip_tknzr_bldr.h"
 #include "mip_esc_cnvrtr.h"
 
+#include "mip_json.h"
+
+
+/* -------------------------------------------------------------------------- */
 
 namespace mip {
 
@@ -67,14 +71,7 @@ private:
     static constexpr const char_t* err_unmatching_curly_brace() { return _T("'}' or ',' expected"); }
     static constexpr const char_t* err_curly_brace_expected() { return _T("'{' expected"); }
 public:
-    enum class type_t {
-        Object,
-        Array,
-        String,
-        Nil,
-        True,
-        False
-    };
+    using result_t = std::pair<bool, json_obj_t::handle_t>;
 
     json_parser_t() {
         tknzr_bldr_t tknzbldr;
@@ -108,8 +105,6 @@ public:
                 return nullptr;
             }
 
-            //std::_cout << std::endl << "TOKEN >>>" << *tkn << "<<<" << std::endl;
-
             const auto tkntype = tkn->type();
 
             assert(tkntype != token_t::tcl_t::COMMENT);
@@ -121,17 +116,16 @@ public:
                 continue;
             }
 
-#ifdef _DEBUG
-            //std::_cout << *tkn << std::endl;
-#endif
             return tkn;
         }
 
         return nullptr;
     }
 
-    bool parse_number(const base_token_t & tkn, _istream & is, _ostream & res, _ostream & err)
+    result_t parse_number(const base_token_t & tkn, _istream & is, _ostream & err)
     {
+        json_obj_t::handle_t ret;
+
         auto tt = tkn.type();
 
         switch (tt) {
@@ -139,10 +133,13 @@ public:
         case token_t::tcl_t::ATOM:
         case token_t::tcl_t::STRING:
         case token_t::tcl_t::END_OF_FILE:
+
             err
                 << err_val_expected()
-                << _T(" at ") << tkn.line() + 1 << _T(":") << tkn.offset() + 1;
-            return false;
+                << _T(" at ") << tkn.line() + 1 
+                << _T(":") << tkn.offset() + 1;
+
+            return std::make_pair(false, nullptr);
 
         case token_t::tcl_t::OTHER:
         default:
@@ -156,9 +153,10 @@ public:
                 {
                     err
                         << err_inv_value()
-                        << _T(" at ") << tkn.line() + 1 << _T(":") << tkn.offset() + 1;
+                        << _T(" at ") << tkn.line() + 1 
+                        << _T(":") << tkn.offset() + 1;
                     
-                    return false;
+                    return std::make_pair(false, nullptr);
                 }
 
                 bool double_num =
@@ -170,41 +168,59 @@ public:
 
                 if (double_num) {
                     const double dv = std::stod(tkn.value(), &idx);
+#ifdef _DEBUG
                     std::_cout << spc(_level * 2) << dv;
+#endif
+
+                    ret = std::make_unique<json_obj_t>(dv);
                 }
                 else {
-                    const long long llv = std::stoll(tkn.value(), &idx);
-                    std::_cout << spc(_level * 2) << llv;
+                    if (value.size() > 1 && value[0] == '-') {
+                        const int64_t ullv = std::stoull(tkn.value(), &idx);
+                        ret = std::make_unique<json_obj_t>(ullv);
+                    }
+                    else {
+                        const int64_t llv = std::stoll(tkn.value(), &idx);
+                        ret = std::make_unique<json_obj_t>(llv);
+                    }
                 }
 
                 if (idx != value.size()) {
                     err
                         << err_inv_value()
-                        << _T(" at ") << tkn.line() + 1 << _T(":") << tkn.offset() + 1;
-                    return false;
-                }
+                        << _T(" at ") 
+                        << tkn.line() + 1 
+                        << _T(":") 
+                        << tkn.offset() + 1;
 
-                return true;
+                    return std::make_pair(false, nullptr);
+                }
             }
             catch (std::exception &) {
                 err
                     << err_inv_value()
-                    << _T(" at ") << tkn.line() + 1 << _T(":") << tkn.offset() + 1;
-                return false;
+                    << _T(" at ") 
+                    << tkn.line() + 1 
+                    << _T(":") << tkn.offset() + 1;
+
+                return std::make_pair(false, nullptr);
             }
+
             break;
         }
 
-        return true;
+        return std::make_pair(true, std::move(ret));
     }
 
-    bool parse_value(_istream & is, _ostream & res, _ostream & err)
+    result_t parse_value(_istream & is, _ostream & err)
     {
+        json_obj_t::handle_t ret;
+
         auto tkn = get_token(is);
 
         if (!tkn) {
             err << err_reading_stream() << with(tkn);
-            return false;
+            return std::make_pair(false, nullptr);
         }
 
         auto tt = tkn->type();
@@ -212,213 +228,246 @@ public:
         switch (tt) {
         case token_t::tcl_t::END_OF_FILE:
             err << err_val_expected() << with(tkn);
-            return false;
+            return std::make_pair(false, nullptr);
 
         case token_t::tcl_t::STRING:
+#ifdef _DEBUG
             std::_cout
                 << spc(_level * 2)
                 << _T("\"") << tkn->value() << "\"" << std::endl;
+#endif
+            ret = std::make_unique<json_obj_t>(tkn->value());
             break;
 
 
         case token_t::tcl_t::ATOM:
             if (tkn->value() == _T("{")) {
-                return parse_object(is, res, err);
+                return parse_object(is, err);
             }
             else if (tkn->value() == _T("[")) {
-                return parse_array(is, res, err);
+                return parse_array(is, err);
             }
 
-            return false;
-
+            return std::make_pair(false, nullptr);
 
         case token_t::tcl_t::OTHER:
         default:
             if (tkn->value() == _T("null")) {
+#ifdef _DEBUG
                 std::_cout
                     << spc(_level * 2)
                     << _T("null") << std::endl;
+#endif
+                ret = std::make_unique<json_obj_t>();
                 break;
             }
             else if (tkn->value() == _T("true")) {
+#ifdef _DEBUG
                 std::_cout
                     << spc(_level * 2)
                     << _T("true") << std::endl;
+#endif
+                ret = std::make_unique<json_obj_t>(true);
                 break;
             }
             else if (tkn->value() == _T("false")) {
+#ifdef _DEBUG
                 std::_cout
                     << spc(_level * 2)
                     << _T("false") << std::endl;
+#endif
+                ret = std::make_unique<json_obj_t>(false);
                 break;
             }
             else {
-                return parse_number(*tkn, is, res, err);
+                return parse_number(*tkn, is, err);
             }
         }
 
-        return true;
+        return std::make_pair(true, std::move(ret));
     }
 
-    bool parse_object(_istream & is, _ostream & res, _ostream & err) {
+    result_t parse_object(_istream & is, _ostream & err) {
         ++_level;
+
+        json_obj_t::handle_t obj = json_obj_t::make_object();
 
         do {
             auto tkn = get_token(is);
 
             if (!tkn) {
                 err << err_reading_stream() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->type() == token_t::tcl_t::END_OF_FILE) {
-                return true;
+                break;
             }
 
             if (tkn->type() != token_t::tcl_t::STRING) {
                 err << err_str_expected() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
+            const auto item_name = tkn->value();
+
+#ifdef _DEBUG
             std::_cout
                 << spc(_level * 2)
                 << "{ \""
-                << tkn->value()
+                << item_name
                 << "\"" << std::endl;
+#endif
 
             tkn = get_token(is);
 
             if (!tkn) {
                 err << err_reading_stream() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->type() == token_t::tcl_t::END_OF_FILE) {
                 err << err_val_expected() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->type() != token_t::tcl_t::ATOM || tkn->value() != _T(":")) {
                 err << err_colon_expected() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
-            if (!parse_value(is, res, err)) {
-                return false;
+            auto ret = parse_value(is, err);
+
+            if (!ret.first) {
+                return std::make_pair(false, nullptr);
             }
 
+            obj->add_member(item_name, std::move(ret.second));
+
+#ifdef _DEBUG
             std::_cout << std::endl;
+#endif
 
             tkn = get_token(is);
 
             if (!tkn) {
                 err << err_reading_stream() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->type() == token_t::tcl_t::END_OF_FILE) {
                 err << err_val_expected() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->type() != token_t::tcl_t::ATOM ||
                 (tkn->value() != _T("}") && (tkn->value() != _T(","))))
             {
                 err << err_unmatching_curly_brace() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->value() == _T("}")) {
+#ifdef _DEBUG
                 std::_cout
                     << spc(_level * 2)
                     << "}" << std::endl;
 
                 --_level;
+#endif
                 break;
             }
 
         } while (1);
 
-        return true;
+        return std::make_pair(true, std::move(obj));
     }
 
-    bool parse_array(_istream & is, _ostream & res, _ostream & err) {
+    result_t parse_array(_istream & is, _ostream & err) {
         ++_level;
 
+#ifdef  _DEBUG
         std::_cout
             << spc(_level * 2)
             << "[" << std::endl;
+#endif
+
+        json_obj_t::handle_t obj = json_obj_t::make_array();
 
         do {
-            if (!parse_value(is, res, err)) {
-                return false;
+            auto ret = parse_value(is, err);
+
+            if (!ret.first) {
+                return std::make_pair(false, nullptr);
             }
+
+            obj->push_back(std::move(ret.second));
 
             auto tkn = get_token(is);
 
             if (!tkn) {
                 err << err_reading_stream() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->type() == token_t::tcl_t::END_OF_FILE) {
                 err << err_val_expected() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->type() != token_t::tcl_t::ATOM) {
                 err << err_unmatching_curly_brace() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
             if (tkn->value() == _T("]")) {
+
+#ifdef _DEBUG
                 std::_cout
                     << spc(_level * 2)
                     << "]" << std::endl;
 
                 --_level;
-                return true;
+#endif
+
+                break;
             }
             else if (tkn->value() != _T(",")) {
                 err << err_unmatching_curly_brace() << with(tkn);
-                return false;
+                return std::make_pair(false, nullptr);
             }
 
         } while (true);
 
-        return true;
+        return std::make_pair(true, std::move(obj));
     }
 
-    bool parse(_istream & is, _ostream & res, _ostream & err) {
+    result_t parse(_istream & is, _ostream & err) {
 
         auto tkn = get_token(is);
 
         if (!tkn) {
             err << err_reading_stream() << with(tkn);
-            return false;
+            return std::make_pair(false, nullptr);
         }
 
         if (tkn->type() == token_t::tcl_t::END_OF_FILE) {
-            return true;
+            return std::make_pair(true, nullptr);
         }
 
-
-#ifdef _DEBUG
-        // std::_cout << *tkn << std::endl;
-#endif
 
         if (tkn->type() != base_token_t::tcl_t::ATOM ||
             (tkn->value() != _T("{") && (tkn->value() != _T("["))))
         {
             err << err_curly_brace_expected() << with(tkn);
-            return false;
+            return std::make_pair(false, nullptr);
         }
 
         bool obj = tkn->value() == _T("{");
 
         return obj ?
-            parse_object(is, res, err) :
-            parse_array(is, res, err);
+            parse_object(is, err) :
+            parse_array(is, err);
     }
 
 private:
@@ -436,7 +485,7 @@ private:
 int main(int argc, mip::char_t* argv[])
 {
     if (argc<2) {
-        std::_cerr << "File name missing" << std::endl;
+        std::_cerr << _T("File name missing") << std::endl;
         return 1;
     }
 
@@ -466,15 +515,26 @@ int main(int argc, mip::char_t* argv[])
         return false;
     }
 
-    if (!parser.parse(is, std::_cout, std::_cerr)) {
-        std::_cerr << std::endl << "Parser failed !" << std::endl;
-        //return 1;
+    auto res = parser.parse(is, std::_cerr);
+
+    if (! res.first) {
+        std::_cerr << std::endl << _T("Parser error") << std::endl;
+        return 1;
     }
 
-    std::_cout << "END." << std::endl;
+    if (res.second) {
+        std::_cout << *res.second << std::endl;
+    }
+    else {
+        std::_cout << _T("null") << std::endl;
+    }
 
-    int y;
-    std::_cin >> y;
+    std::_cout << _T("END.") << std::endl;
+
+#ifdef _DEBUG
+    int wait;
+    std::_cin >> wait;
+#endif
 
     return 0;
 }

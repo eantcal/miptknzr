@@ -147,11 +147,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="json_parser.cc" />
+    <ClCompile Include="mip_json.cc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\miptknzr.vcxproj">
       <Project>{f3508278-54fb-4325-9deb-4d1fdbe2c496}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mip_json.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
