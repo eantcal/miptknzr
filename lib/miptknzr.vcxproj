@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F3508278-54FB-4325-9DEB-4D1FDBE2C496}</ProjectGuid>
+    <ProjectGuid>{77A4B16C-1B9C-4C9D-B85D-E9DEA1F64BD9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>miptknzr</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>

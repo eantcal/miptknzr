@@ -1,6 +1,36 @@
 MipTknzr Library ChangeLog
 Please send MipTknzr bug reports to <antonino.calderone@gmail.com>.
 
-2016-11-15
-- First release 1.0
+Author: Antonino Calderone <antonino.calderone@gmail.com>
+Date:   Wed Dec 21 22:04:19 2016 +0000
+- Add json object
 
+
+Author: Antonino Calderone <antonino.calderone@gmail.com>
+Date:   Tue Dec 20 18:45:53 2016 +0000
+- Add json parser test + bug-fixing
+
+
+Author: Antonino Calderone <antonino.calderone@gmail.com>
+Date:   Thu Dec 15 19:47:00 2016 +0000
+- Add UNICODE support, refactoring...
+
+
+Author: Antonino Calderone <antonino.calderone@gmail.com>
+Date:   Thu Nov 17 21:17:32 2016 +0000
+- Add build.sh
+
+
+Author: Antonino Calderone <antonino.calderone@gmail.com>
+Date:   Tue Nov 15 23:16:19 2016 +0000
+- Add missing virtual dtor
+
+
+Author: Antonino Calderone <antonino.calderone@gmail.com>
+Date:   Tue Nov 15 23:12:33 2016 +0000
+- First src commit
+
+
+Author: Antonino Calderone <acaldmail@gmail.com>
+Date:   Tue Nov 15 23:08:27 2016 +0000
+- Initial commit

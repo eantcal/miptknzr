@@ -1,8 +1,8 @@
 ACLOCAL_AMFLAGS=-I m4
 
-SUBDIRS = lib test json_parser_test
+SUBDIRS = lib test 
 
 EXTRA_DIST= \
    include/*.h \
    *.sln \
-   src/*.vcxproj*
+   lib/*.vcxproj*

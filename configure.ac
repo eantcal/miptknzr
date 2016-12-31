@@ -28,6 +28,5 @@ AC_CONFIG_FILES([
   Makefile
   lib/Makefile
   test/Makefile
-  json_parser_test/Makefile
 ])
 AC_OUTPUT
