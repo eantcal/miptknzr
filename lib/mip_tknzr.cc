@@ -142,7 +142,7 @@ void tknzr_t::_reset()
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::_search_eof()
+std::unique_ptr<token_t> tknzr_t::_search_eof()
 {
     if (_eof) {
         auto token_obj = new token_t(
@@ -160,7 +160,7 @@ std::unique_ptr<base_token_t> tknzr_t::_search_eof()
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::_search_eol()
+std::unique_ptr<token_t> tknzr_t::_search_eol()
 {
     if (!_eol_seq.empty()) {
         auto token_obj = new token_t(
@@ -182,7 +182,7 @@ std::unique_ptr<base_token_t> tknzr_t::_search_eol()
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::_search_other_tkn()
+std::unique_ptr<token_t> tknzr_t::_search_other_tkn()
 {
     if (!_other_token.empty())
     {
@@ -204,7 +204,7 @@ std::unique_ptr<base_token_t> tknzr_t::_search_other_tkn()
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::_get_tkn(
+std::unique_ptr<token_t> tknzr_t::_get_tkn(
     const std::set<string_t> & tknset,
     token_t::tcl_t tkncl,
     get_t cut_type)
@@ -273,7 +273,7 @@ bool tknzr_t::_ml_comment_begin(
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::_get_string()
+std::unique_ptr<token_t> tknzr_t::_get_string()
 {
     if (_textline.size() < 2) {
         return nullptr;
@@ -344,7 +344,7 @@ std::unique_ptr<base_token_t> tknzr_t::_get_string()
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t>
+std::unique_ptr<token_t>
 tknzr_t::_extract_comment(
     string_t & comment,
     size_t end_comment_offset,
@@ -384,7 +384,7 @@ tknzr_t::_extract_comment(
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::_get_comment(_istream & is)
+std::unique_ptr<token_t> tknzr_t::_get_comment(_istream & is)
 {
     string_t comment;
     string_t end_comment;
@@ -447,11 +447,11 @@ std::unique_ptr<base_token_t> tknzr_t::_get_comment(_istream & is)
 
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<base_token_t> tknzr_t::next(_istream & is)
+std::unique_ptr<token_t> tknzr_t::next(_istream & is)
 {
     is.unsetf(std::ios_base::skipws);
 
-    std::unique_ptr<base_token_t> tkn;
+    std::unique_ptr<token_t> tkn;
 
     while (!tkn) {
 

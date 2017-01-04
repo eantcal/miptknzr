@@ -15,7 +15,7 @@
 
 /* -------------------------------------------------------------------------- */
 
-#include "mip_base_token.h"
+#include "mip_token.h"
 
 #include <memory>
 #include <istream>
@@ -41,7 +41,7 @@ struct base_tknzr_t
     virtual ~base_tknzr_t() {}
 
     //! Return (next) token found in the input stream or nullptr in case of error
-    virtual std::unique_ptr<base_token_t> next(_istream & is) = 0;
+    virtual std::unique_ptr<token_t> next(_istream & is) = 0;
 };
 
 

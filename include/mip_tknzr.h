@@ -41,7 +41,7 @@ public:
     using ml_commdef_t = std::pair<string_t, string_t>;
 
     //! Return next token found in a given input stream
-    std::unique_ptr<base_token_t> next(_istream & is) override;
+    std::unique_ptr<token_t> next(_istream & is) override;
 
     //! dtor
     virtual ~tknzr_t();
@@ -90,24 +90,24 @@ private:
         string_t& eol_s, 
         bool & eof);
 
-    std::unique_ptr<base_token_t> _extract_comment(
+    std::unique_ptr<token_t> _extract_comment(
         string_t & comment,
         size_t end_comment_offset,
         string_t& end_comment,
         size_t line_number,
         size_t offset);
 
-    std::unique_ptr<base_token_t> _search_eof();
-    std::unique_ptr<base_token_t> _search_eol();
-    std::unique_ptr<base_token_t> _search_other_tkn();
-    std::unique_ptr<base_token_t> _get_comment(_istream & is);
+    std::unique_ptr<token_t> _search_eof();
+    std::unique_ptr<token_t> _search_eol();
+    std::unique_ptr<token_t> _search_other_tkn();
+    std::unique_ptr<token_t> _get_comment(_istream & is);
 
-    std::unique_ptr<base_token_t> _get_tkn(
+    std::unique_ptr<token_t> _get_tkn(
         const std::set<string_t> & tknset,
         token_t::tcl_t tkncl,
         get_t cut_type);
 
-    std::unique_ptr<base_token_t> _get_string();
+    std::unique_ptr<token_t> _get_string();
 
     std::set<string_t> _blkdef;
     std::set<string_t> _atomdef;

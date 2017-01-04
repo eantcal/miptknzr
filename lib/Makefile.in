@@ -131,8 +131,8 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libmiptknzr_la_LIBADD =
-am_libmiptknzr_la_OBJECTS = mip_base_token.lo mip_esc_cnvrtr.lo \
-	mip_tknzr_bldr.lo mip_tknzr.lo
+am_libmiptknzr_la_OBJECTS = mip_esc_cnvrtr.lo mip_tknzr_bldr.lo \
+	mip_tknzr.lo mip_token.lo
 libmiptknzr_la_OBJECTS = $(am_libmiptknzr_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -351,14 +351,13 @@ libmiptknzr_la_SOURCES = \
    mip_base_esc_cnvrtr.h \
    mip_base_tknzr_bldr.h \
    mip_base_tknzr.h \
-   mip_base_token.cc \
-   mip_base_token.h \
    mip_esc_cnvrtr.cc \
    mip_esc_cnvrtr.h \
    mip_tknzr_bldr.cc \
    mip_tknzr_bldr.h \
    mip_tknzr.cc \
    mip_tknzr.h \
+   mip_token.cc \
    mip_token.h
 
 AM_CXXFLAGS = $(INTI_CFLAGS) \
@@ -443,10 +442,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mip_base_token.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mip_esc_cnvrtr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mip_tknzr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mip_tknzr_bldr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mip_token.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

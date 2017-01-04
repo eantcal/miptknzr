@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <istream>
-
+#include <set>
 
 /* -------------------------------------------------------------------------- */
 
@@ -41,8 +41,14 @@ struct base_tknzr_bldr_t
     //! Add a definition of an atomic token
     virtual bool def_atom(const string_t& value) = 0;
 
+    //! Define a set of atomic tokens
+    virtual bool def_atom(const std::set<string_t>& value_set) = 0;
+
     //! Add a definition of a blank token
     virtual bool def_blank(const string_t& value) = 0;
+
+    //! Define a set of blank tokens
+    virtual bool def_blank(const std::set<string_t>& value_set) = 0;
 
     //! Add a definition of a multi-line comment
     virtual bool def_ml_comment(const string_t& begin, const string_t& end) = 0;
@@ -50,8 +56,14 @@ struct base_tknzr_bldr_t
     //! Add a definition of a single-line comment
     virtual bool def_sl_comment(const string_t& prefix) = 0;
 
-    //! Add a definition of end-of-line token
+    //! Define of a set of single-line comments
+    virtual bool def_sl_comment(const std::set<string_t>& prefix_set) = 0;
+
+    //! Add a definition of end-of-line tokens
     virtual bool def_eol(const base_tknzr_t::eol_t& value) = 0;
+
+    //! Define a set of end-of-line tokens
+    virtual bool def_eol(const std::set<base_tknzr_t::eol_t>& value_set) = 0;
 
     //! Add a definition of a string token
     virtual bool def_string(char_t quote, std::shared_ptr<base_esc_cnvrtr_t> et = nullptr) = 0;

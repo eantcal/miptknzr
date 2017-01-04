@@ -56,9 +56,25 @@ bool tknzr_bldr_t::def_atom(const string_t& value)
 
 /* -------------------------------------------------------------------------- */
 
+bool tknzr_bldr_t::def_atom(const std::set<string_t>& value_set)
+{
+    return _def_item(value_set, _tknzr->_atomdef);
+}
+
+
+/* -------------------------------------------------------------------------- */
+
 bool tknzr_bldr_t::def_blank(const string_t& value)
 {
     return _def_item(value, _tknzr->_blkdef);
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+bool tknzr_bldr_t::def_blank(const std::set<string_t>& value_set)
+{
+    return _def_item(value_set, _tknzr->_blkdef);
 }
 
 
@@ -72,9 +88,25 @@ bool tknzr_bldr_t::def_eol(const base_tknzr_t::eol_t& value)
 
 /* -------------------------------------------------------------------------- */
 
+bool tknzr_bldr_t::def_eol(const std::set<base_tknzr_t::eol_t>& value_set)
+{
+    return _def_item(value_set, _tknzr->_eoldef);
+}
+
+
+/* -------------------------------------------------------------------------- */
+
 bool tknzr_bldr_t::def_sl_comment(const string_t& prefix)
 {
     return _def_item(prefix, _tknzr->_sl_comdef);
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+bool tknzr_bldr_t::def_sl_comment(const std::set<string_t>& prefix_set)
+{
+    return _def_item(prefix_set, _tknzr->_sl_comdef);
 }
 
 

@@ -15,7 +15,7 @@
 
 /* -------------------------------------------------------------------------- */
 
-#include "mip_base_token.h"
+#include "mip_token.h"
 
 #include <memory>
 #include <istream>
