@@ -4,7 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([miptknzr], [1.0], [antonino.calderone@gmail.com])
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([lib/mip_base_token.cc])
+AC_CONFIG_SRCDIR([lib/mip_token.cc])
 AC_CONFIG_HEADERS([config.h])
 
 AC_CONFIG_MACRO_DIR([m4])
