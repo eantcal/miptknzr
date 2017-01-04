@@ -9,7 +9,7 @@
 
 /* -------------------------------------------------------------------------- */
 
-#include "mip_base_token.h"
+#include "mip_token.h"
 
 
 /* -------------------------------------------------------------------------- */
@@ -19,7 +19,7 @@ namespace mip {
 
 /* -------------------------------------------------------------------------- */
 
-const char_t* base_token_t::type2str(tcl_t type) {
+const char_t* token_t::type2str(tcl_t type) {
     switch (type) {
     case tcl_t::ATOM:
         return _T("atomic");
@@ -45,9 +45,9 @@ const char_t* base_token_t::type2str(tcl_t type) {
 
 /* -------------------------------------------------------------------------- */
 
-_ostream& operator<<(_ostream& os, base_token_t& tkn) {
+_ostream& operator<<(_ostream& os, token_t& tkn) {
     os << _T("type:'")
-        << base_token_t::type2str(tkn.type())
+        << token_t::type2str(tkn.type())
         << _T("' value:'")
         << tkn.value() << _T("' at ")
         << tkn.line() + 1 << _T(".") << tkn.offset() + 1
