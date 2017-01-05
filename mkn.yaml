@@ -1,0 +1,15 @@
+#! clean build -dtSa "-O2 -fPIC"
+
+name: miptknzr
+version: master
+scm: https://github.com/eantcal/miptknzr
+parent: tknzr
+
+profile:
+  - name: tknzr
+    lang: cpp
+    inc: include
+    src: lib
+    mode: shared
+    install: build/bin
+
