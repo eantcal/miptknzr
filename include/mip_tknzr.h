@@ -43,9 +43,13 @@ public:
     //! Return next token found in a given input stream
     std::unique_ptr<token_t> next(_istream & is) override;
 
+    //! Return true if there is no more data to process
+    bool eos(_istream & is) override;
+
     //! dtor
     virtual ~tknzr_t();
 
+    
 private:
     tknzr_t() noexcept {}
     tknzr_t(const tknzr_t&) = delete;

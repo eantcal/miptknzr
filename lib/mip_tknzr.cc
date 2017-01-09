@@ -534,6 +534,18 @@ std::unique_ptr<token_t> tknzr_t::next(_istream & is)
 
 /* -------------------------------------------------------------------------- */
 
+bool tknzr_t::eos(_istream & is)
+{
+    if (_textline.empty() && _other_token.empty() && _eol_seq.empty()) {
+        return is.eof();
+    }
+
+    return false;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
 tknzr_t::~tknzr_t() 
 {}
 
