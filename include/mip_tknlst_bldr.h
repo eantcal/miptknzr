@@ -142,11 +142,8 @@ private:
 
     // -------------------------------------------------------------------------
 
-    string_t _filename;
     tknzr_bldr_t _tknzr_bldr;
-
     std::set<token_t::tcl_t> _blnks;
-
     std::unique_ptr<base_tknzr_t> _tknzr;
 };
 
