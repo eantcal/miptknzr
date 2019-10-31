@@ -3,7 +3,7 @@ language: cpp
 env:
   global:
     # Ubuntu version
-    - LINUX_DIST=trusty
+    - LINUX_DIST=bionic
     - DEPS_DIR=${TRAVIS_BUILD_DIR}/deps
     # Global build options and C++ flags
     - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
@@ -14,29 +14,9 @@ env:
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: bionic
       sudo: true
       compiler: gcc
-      addons:
-       apt:
-         packages: &precise_latest_boost_packages
-           - gcc-8.3
-           - g++-8.3
-           #- gcov-4.9
-           - clang-9.0
-           ##- valgrind
-           # Misc
-           ##- python-yaml
-           ##- lcov
-           ##- libopencv-dev
-         sources: &precise_latest_boost_sources
-           - ubuntu-toolchain-r-test
-           - llvm-toolchain-precise-3.7
-         sources:
-           - george-edison55-precise-backports
-         packages:
-           - cmake-data
-           - cmake
     
 before_install:
     # Combine global build options with OS/compiler-dependent options
@@ -56,4 +36,4 @@ script:
     - make
     
 after_success:
-    # - codecov -t c376990f-2ad6-4f7b-bbdb-5378a52e295c -X gcov
+    # todo
