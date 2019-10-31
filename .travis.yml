@@ -32,17 +32,28 @@ matrix:
          sources: &precise_latest_boost_sources
            - ubuntu-toolchain-r-test
            - llvm-toolchain-precise-3.7
+         sources:
+           - george-edison55-precise-backports
+         packages:
+           - cmake-data
+           - cmake
     
 before_install:
     # Combine global build options with OS/compiler-dependent options
     - export CMAKE_OPTIONS=${CMAKE_OPTIONS}" "${ENV_CMAKE_OPTIONS}
     - export CXX_FLAGS=${CXX_FLAGS}" "${ENV_CXX_FLAGS}
 
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+
 script:
     ############################################################################
     # Build main and tests
     ############################################################################
-     - ./build.sh
 
+    - make
+    
 after_success:
     # - codecov -t c376990f-2ad6-4f7b-bbdb-5378a52e295c -X gcov
