@@ -120,6 +120,7 @@ bool esc_cnvrtr_t::convert(const string_t& str, size_t & rcnt, char_t & ch) cons
         break;
     case _T('n'):
         ch = _T('\n');
+        break;
     case _T('r'):
         ch = _T('\r');
         break;
